@@ -1,22 +1,24 @@
 pipeline {
-    agent any
-    parameters {
-        string(name: 'MESSAGE', defaultValue: 'Hello World', description: 'Message to print')
+  agent { label 'linux' }
+
+  parameters {
+    string(name: 'MESSAGE', defaultValue: 'Hello World', description: 'Message to print')
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        git branch: 'main', url: 'https://github.com/nivedita-how/rep1.git'
+      }
     }
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/nivedita-how/rep1.git'
-            }
-        }
-        stage('Run PowerShell Script') {
-            steps {
-                pwsh """
-                    Write-Host "Running h1.ps1 with MESSAGE='${params.MESSAGE}'"
-                    .\\h1.ps1
-                """
-            }
-        }
+
+    stage('Run h1.ps1') {
+      steps {
+        // Call via pwsh; use Linux path/quoting
+        pwsh "./h1.ps1 -Message \"${params.MESSAGE}\""
+        // Alternatively:
+        // pwsh "pwsh -File ./h1.ps1 -Message \"${params.MESSAGE}\""
+      }
     }
+  }
 }
