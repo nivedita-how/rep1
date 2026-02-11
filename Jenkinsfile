@@ -1,23 +1,17 @@
 pipeline {
   agent { label 'linux' }
-
   parameters {
     string(name: 'MESSAGE', defaultValue: 'Hello World', description: 'Message to print')
   }
-
   stages {
     stage('Checkout') {
       steps {
         git branch: 'main', url: 'https://github.com/nivedita-how/rep1.git'
       }
     }
-
-    stage('Run h1.ps1') {
+    stage('Run') {
       steps {
-        // Call via pwsh; use Linux path/quoting
         pwsh "./h1.ps1 -Message \"${params.MESSAGE}\""
-        // Alternatively:
-        // pwsh "pwsh -File ./h1.ps1 -Message \"${params.MESSAGE}\""
       }
     }
   }
