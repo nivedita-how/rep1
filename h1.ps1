@@ -1,1 +1,4 @@
-Write-Host "Hello World"
+param(
+    [string]$Message = "Hello World"
+)
+Write-Host $Message
